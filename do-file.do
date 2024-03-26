@@ -1,8 +1,7 @@
 clear all
 
-//check directory
+//check which directory
 cd 
-
 
 //import raw data and store as input
 import delimited "0_raw\gen_ai_earnings.csv"
