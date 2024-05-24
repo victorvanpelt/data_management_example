@@ -1,13 +1,14 @@
+//clear everything to ensure nothing came before
 clear all
 
-//check which directory
+//check which directory the do-file is in
 cd 
 
-//import raw data and store as input
+//import raw data and store as input data file in input-folder
 import delimited "0_raw\gen_ai_earnings.csv"
 save "1_input\gen_ai_earnings.dta", replace
 
-//data management
+//import input data, transform the data, and save as process data
 clear all
 use "1_input\gen_ai_earnings.dta", replace
 
@@ -16,7 +17,7 @@ drop if earnings_scaled<0
 
 save "2_process\gen_ai_earnings.dta", replace
 
-//analysis
+//import process data, conduct analysis to generate output
 clear all
 use "2_process\gen_ai_earnings.dta"
 
@@ -27,4 +28,5 @@ replace stats(r2 F p df_m N) b(3) aux(se 3) star(* 0.10 ** 0.05 *** 0.01) obslas
 compress title(TABLE 1 - REGRESSIONS OF SCALED EARNINGS ON GENERATIVE AI) addnotes(p-levels are two-tailed, * p < 0.10, ** p < 0.05, *** p < 0.01; the numbers within the round parentheses are robust standard errors.) nonotes
 eststo clear
 
+//close stata
 exit, STATA clear
