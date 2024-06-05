@@ -5,6 +5,7 @@ clear all
 cd 
 
 //import raw data and store as input data file in input-folder
+// also for merging data
 import delimited "0_raw\gen_ai_earnings.csv"
 save "1_input\gen_ai_earnings.dta", replace
 
