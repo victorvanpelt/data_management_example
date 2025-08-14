@@ -7,5 +7,9 @@
 !README.md
 
 # Keep everything in the 3_output folder
+!0_data/
+!1_code/
+!1_code/**
+!2_process/
 !3_output/
 !3_output/**
