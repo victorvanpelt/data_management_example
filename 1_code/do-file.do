@@ -2,7 +2,8 @@
 clear all
 
 //go to the main director
-cd ..
+capture cd 1_code   // if we're at the project root, step into 1_code (no error if already in 1_code)
+cd ..               // now we're guaranteed to be at the project root
 
 //import raw data and store as input data file in process-folder
 // also for merging data

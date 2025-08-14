@@ -1,22 +1,20 @@
-# Makefile
+# Default goal is run. So you can just type "make"
+.DEFAULT_GOAL := run
 
 # Stata version
 STATA = "C:\Program Files\Stata18\StataSE-64.exe"
 
 # do-file variable
-DOFILE = do-file.do
-
-# Define the log file where Stata output will be saved
+DOFILE = 1_code\do-file.do
 LOGFILE = do-file.log
 
 # Define the target to execute the .do file
 run: $(DOFILE)
 	$(STATA) /e /q do $(DOFILE) > NUL 2>&1
-	-del $(LOGFILE)
+	@IF EXIST "$(LOGFILE)" DEL /Q "$(LOGFILE)" >NUL 2>&1
 
-# Clean up log files
 clean:
-	-del $(LOGFILE)
+	@IF EXIST "$(LOGFILE)" DEL /Q "$(LOGFILE)" >NUL 2>&1
 
 # Phony targets
 .PHONY: run clean
