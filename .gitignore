@@ -1,0 +1,11 @@
+# Ignore everything
+*
+
+# Keep these specific files
+!.gitignore
+!makefile.mak
+!README.md
+
+# Keep everything in the 3_output folder
+!3_output/
+!3_output/**
