@@ -28,7 +28,6 @@ quarto:
 	$(RSCRIPT) --vanilla --quiet "$(RFILE)" >NUL 2>&1
 	$(QUARTO) render "$(QMD)" --execute --embed-resources
 	@cmd /c "if exist "1_code\code.pdf" move "1_code\code.pdf" "3_output\code.pdf"
-#	@cmd /c "if exist "1_code\code.html" del "1_code\code.html""
 
 # housekeeping to remove stuck logfiles, quarto files, and clear process and output folders. Run with "make clean"
 clean:
