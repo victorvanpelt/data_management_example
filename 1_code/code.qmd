@@ -1,0 +1,49 @@
+---
+title: "Stata Example"
+author: "Victor van Pelt"
+format: html
+editor: visual
+jupyter: python3
+---
+
+## Setup Stata
+```{python}
+import stata_setup
+stata_setup.config("C:/Program Files/Stata18", "se")
+```
+
+## Load data in dataframe (Python)
+
+```{python}
+import pandas as pd
+df = pd.read_csv('../0_data/gen_ai_earnings.csv')
+print(df.head(10))
+```
+
+## Load Python dataframe into Stata and save DTA
+```{python}
+from pystata import stata
+stata.pdataframe_to_data(df, True)
+%stata capture cd "1_code"
+%stata cd ..
+%stata save "2_process\gen_ai_earnings.dta", replace
+```
+
+# Conduct analyses
+
+```{python}
+from pystata import stata
+%stata gen earnings_scaled = earnings / 10
+%stata drop if earnings_scaled<0
+%stata summarize earnings_scaled
+%stata save "2_process\edit_gen_ai_earnings.dta", replace
+```
+
+# Produce Table
+
+```{python}
+%%stata
+eststo: regress earnings_scaled gen_ai, r
+esttab using "3_output\Table 1quarto.rtf", replace stats(r2 F p df_m N) b(3) aux(se 3) star(* 0.10 ** 0.05 *** 0.01) obslast onecell nogaps compress title(TABLE 1 - REGRESSIONS OF SCALED EARNINGS ON GENERATIVE AI) addnotes(p-levels are two-tailed, * p < 0.10, ** p < 0.05, *** p < 0.01; the numbers within the round parentheses are robust standard errors.)nonotes
+eststo clear
+```
