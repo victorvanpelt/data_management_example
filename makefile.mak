@@ -23,14 +23,22 @@ do: $(DOFILE)
 r:
 	$(RSCRIPT) --vanilla --quiet "$(RFILE)" >NUL 2>&1
 
-# Quarto code. Run with "make quarto"
+# Quarto code. Run with "make quarto." Immediately removes quarto.html after running and moves code.pdf to 3_output
 quarto:
-	$(QUARTO) render "$(QMD)" --execute
+	$(RSCRIPT) --vanilla --quiet "$(RFILE)" >NUL 2>&1
+	$(QUARTO) render "$(QMD)" --execute --embed-resources
+	@cmd /c "if exist "1_code\code.pdf" move "1_code\code.pdf" "3_output\code.pdf"
+#	@cmd /c "if exist "1_code\code.html" del "1_code\code.html""
 
-# housekeeping to remove stuck logfile. Run with "make clean"
+# housekeeping to remove stuck logfiles and quarto files. Run with "make clean"
 clean:
 	@cmd /c "if exist "*.log"  del /q /f "*.log"
 	@cmd /c "if exist "*.smcl"  del /q /f "*.smcl"
+	@cmd /c "if exist "1_code\code.html" del "1_code\code.html""
+	@cmd /c "if exist "2_process\" rmdir /s /q "2_process\""
+	@cmd /c "mkdir "2_process\""
+	@cmd /c "if exist "3_output\" rmdir /s /q "3_output\""
+	@cmd /c "mkdir "3_output\""	
 
 # Phony targets. Type "make r," "make do," or "make clean"
 .PHONY: run do r quarto clean
