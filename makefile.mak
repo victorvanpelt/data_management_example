@@ -30,15 +30,14 @@ quarto:
 	@cmd /c "if exist "1_code\code.pdf" move "1_code\code.pdf" "3_output\code.pdf"
 #	@cmd /c "if exist "1_code\code.html" del "1_code\code.html""
 
-# housekeeping to remove stuck logfiles and quarto files. Run with "make clean"
+# housekeeping to remove stuck logfiles, quarto files, and clear process and output folders. Run with "make clean"
 clean:
 	@cmd /c "if exist "*.log"  del /q /f "*.log"
 	@cmd /c "if exist "*.smcl"  del /q /f "*.smcl"
 	@cmd /c "if exist "1_code\code.html" del "1_code\code.html""
-	@cmd /c "if exist "2_process\" rmdir /s /q "2_process\""
-	@cmd /c "mkdir "2_process\""
-	@cmd /c "if exist "3_output\" rmdir /s /q "3_output\""
-	@cmd /c "mkdir "3_output\""	
+
+	@cmd /c powershell -NoLogo -NoProfile -Command "If(!(Test-Path '2_process')){New-Item -ItemType Directory -Path '2_process' | Out-Null}; Get-ChildItem -LiteralPath '2_process' -Force | Where-Object Name -ne '.gitkeep' | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue; If(!(Test-Path '2_process\.gitkeep')){ 'keep' | Out-File -NoNewline '2_process\.gitkeep' -Encoding ascii }"
+	@cmd /c powershell -NoLogo -NoProfile -Command "If(!(Test-Path '3_output')){New-Item -ItemType Directory -Path '3_output' | Out-Null}; Get-ChildItem -LiteralPath '3_output' -Force | Where-Object Name -ne '.gitkeep' | Remove-Item -Recurse -Force -ErrorAction SilentlyContinue; If(!(Test-Path '3_output\.gitkeep')){ 'keep' | Out-File -NoNewline '3_output\.gitkeep' -Encoding ascii }"
 
 # Phony targets. Type "make r," "make do," or "make clean"
 .PHONY: run do r quarto clean
